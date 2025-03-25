@@ -8,7 +8,6 @@ import { Link } from "wouter";
 import { useRef, useState } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable"; // Import the autoTable library
-import { toast } from "@/components/ui/toast";
 import html2canvas from "html2canvas";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
@@ -38,18 +37,27 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showFinalScores, setShowFinalScores] = useState(false);
   const itemsPerPage = 10; // Show 10 participants per page
 
   const { toast } = useToast();
   const tableRef = useRef<HTMLDivElement>(null);
 
-  // Filter leaderboard based on search query
+  // Filter leaderboard based on search query and sort in descending order by participantId
   const filteredLeaderboard = leaderboard
-    ? leaderboard.filter(entry =>
-        entry.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        entry.project.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        entry.participantCode.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    ? leaderboard
+        .filter(entry =>
+          entry.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          entry.project.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          entry.participantCode.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        // Sort in descending order by participantCode 
+        .sort((a, b) => {
+          // Extract numeric part from participantCode if possible
+          const idA = parseInt(a.participantCode.replace(/\D/g, '')) || 0;
+          const idB = parseInt(b.participantCode.replace(/\D/g, '')) || 0;
+          return idB - idA; // Descending order
+        })
     : [];
 
   // Paginate the filtered results
@@ -103,7 +111,7 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
 
     // Add centered bold text
     doc.text(text, x, 10);
-    const header = ["RANK", "TEAM NAME", "PROJECT TITLE", "PD", "FN", "PR", "WD", "IM", "SCORE"];
+    const header = ["Rank", "Participant", "Project Title", "Project Design", "Functionality", "Presentation", "Web Design", "Impact", "Total Score"];
     doc.setFontSize(12);
     autoTable(doc, {
       head: [header],
@@ -280,25 +288,37 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
         </div>
       </div>
 
+      <div className="flex justify-end mb-2">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => setShowFinalScores(!showFinalScores)}
+          className="flex items-center"
+        >
+          <Trophy className="h-4 w-4 mr-1.5" />
+          {showFinalScores ? "Hide Total Scores" : "Reveal Total Scores"}
+        </Button>
+      </div>
+      
       <div ref={tableRef} className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
         <div id="leaderboard-table" className="overflow-x-auto">
-        <div className="bg-slate-100 px-6 py-3 border-b border-slate-200">
+          <div className="bg-slate-100 px-6 py-3 border-b border-slate-200">
           <h3 className="text-sm font-medium text-gray-700">
                LEGEND: PROJECT DESIGN 25% (PD) | FUNCTIONALITY 30% (FN) | PRESENTATION 15% (PR) | WEB DESIGN 10% (WD) | IMPACT TO THE COMMUNITY 20% (IC)
          </h3>
         </div>
-  <table className="min-w-full divide-y divide-slate-200">
+          <table className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">RANK</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">TEAM NAME</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PROJECT TITLE</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PD</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">FN</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PR</th>
-                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">WD</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">IM</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">TOTAL SCORE</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Rank</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Participant</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Project Title</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Project Design</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Functionality</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Presentation</th>
+                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Web Design</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Impact of the Project</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Total Score</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-slate-200">
@@ -310,16 +330,10 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
                 </tr>
               ) : currentItems.length > 0 ? (
                 currentItems.map((entry) => (
-                  <motion.tr 
+                  <tr 
                     key={entry.participantId} 
                     className="hover:bg-slate-50 cursor-pointer"
                     onClick={() => handleRowClick(entry)}
-                    whileHover={{ backgroundColor: "rgba(241, 245, 249, 0.5)" }}
-                    transition={{ duration: 1.2 }}
-                    layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className={`flex items-center justify-center w-8 h-8 rounded-full text-white font-semibold ${getRankBadgeColor(entry.rank)}`}>
@@ -338,39 +352,83 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-800 max-w-[150px] truncate" title={entry.project}>
-                        {entry.project}
+                      {/* Sliding text for long project titles */}
+                      <div className="w-[150px] overflow-hidden">
+                        <div 
+                          className={`text-sm text-slate-800 ${entry.project.length > 20 ? 'animate-marquee' : ''}`}
+                          style={{ 
+                            animationDuration: `${Math.max(3, entry.project.length / 5)}s`,
+                            width: 'max-content' 
+                          }}
+                          title={entry.project}
+                        >
+                          {entry.project}
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
+                      <motion.div 
+                        className="flex items-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        key={`${entry.participantId}-pd-${entry.projectDesign}`}
+                      >
                         <span className="text-sm font-medium text-slate-800">{entry.projectDesign.toFixed(1)}</span>
-                      </div>
+                      </motion.div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
+                      <motion.div 
+                        className="flex items-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        key={`${entry.participantId}-func-${entry.functionality}`}
+                      >
                         <span className="text-sm font-medium text-slate-800">{entry.functionality.toFixed(1)}</span>
-                      </div>
+                      </motion.div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
+                      <motion.div 
+                        className="flex items-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        key={`${entry.participantId}-pres-${entry.presentation}`}
+                      >
                         <span className="text-sm font-medium text-slate-800">{entry.presentation.toFixed(1)}</span>
-                      </div>
+                      </motion.div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
+                      <motion.div 
+                        className="flex items-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        key={`${entry.participantId}-web-${entry.webDesign}`}
+                      >
                         <span className="text-sm font-medium text-slate-800">{entry.webDesign.toFixed(1)}</span>
-                      </div>
+                      </motion.div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
+                      <motion.div 
+                        className="flex items-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        key={`${entry.participantId}-impact-${entry.impact}`}
+                      >
                         <span className="text-sm font-medium text-slate-800">{entry.impact.toFixed(1)}</span>
-                      </div>
+                      </motion.div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <div className="font-bold text-primary text-lg">{entry.total.toFixed(1)}</div>
+                      {showFinalScores ? (
+                        <div className="font-bold text-primary text-lg">{entry.total.toFixed(1)}</div>
+                      ) : (
+                        <div className="text-slate-400 text-sm">Hidden</div>
+                      )}
                     </td>
-                  </motion.tr>
+                  </tr>
                 ))
               ) : (
                 <tr>
