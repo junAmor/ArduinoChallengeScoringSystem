@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 5s linear infinite alternate;
+  white-space: nowrap;
+  padding-right: 30px;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
 :root {
   --teal-green: #01726F;
   --dark-cyan: #025959;
