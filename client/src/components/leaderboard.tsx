@@ -282,8 +282,12 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
 
       <div ref={tableRef} className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
         <div id="leaderboard-table" className="overflow-x-auto">
-          <H3>LEGEND: PROJECT DESIGN 25% (PD) | FUNCTIONALITY 30% (FN) | PRESENTATION 15% (PR) | WEB DESIGN 10% (WD) | IMPACT TO THE COMMUNITY 20%(IC)</H3>
-          <table className="min-w-full divide-y divide-slate-200">
+        <div className="bg-slate-100 px-6 py-3 border-b border-slate-200">
+          <h3 className="text-sm font-medium text-gray-700">
+               LEGEND: PROJECT DESIGN 25% (PD) | FUNCTIONALITY 30% (FN) | PRESENTATION 15% (PR) | WEB DESIGN 10% (WD) | IMPACT TO THE COMMUNITY 20% (IC)
+         </h3>
+        </div>
+  <table className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50">
               <tr>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">RANK</th>
