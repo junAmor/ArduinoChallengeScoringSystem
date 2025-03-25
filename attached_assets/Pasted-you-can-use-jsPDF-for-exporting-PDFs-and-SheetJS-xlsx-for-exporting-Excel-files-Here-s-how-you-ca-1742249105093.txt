@@ -1,0 +1,135 @@
+you can use jsPDF for exporting PDFs and SheetJS (xlsx) for exporting Excel files. Here's how you can implement both:
+
+Export to PDF (Using jsPDF)
+You'll need to install jspdf and html2canvas:
+Then, add your handleExport function:
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { toast } from "@/components/ui/toast"; // Adjust import based on your setup
+
+const handleExportPDF = () => {
+const input = document.getElementById("leaderboard"); // Make sure this ID exists on your table
+
+if (!input) {
+toast({
+title: "Error",
+description: "Leaderboard content not found",
+});
+return;
+}
+
+html2canvas(input).then((canvas) => {
+const imgData = canvas.toDataURL("image/png");
+const pdf = new jsPDF("p", "mm", "a4");
+const imgWidth = 210;
+const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+pdf.save("leaderboard.pdf");
+toast({
+  title: "Export Success",
+  description: "Leaderboard has been exported as a PDF file",
+});
+});
+};
+
+Export to Excel (Using SheetJS)
+Install xlsx:
+Modify your function:
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { toast } from "@/components/ui/toast"; // Adjust import based on your setup
+const handleExportExcel = () => {
+const table = document.getElementById("leaderboard");
+
+if (!table) {
+toast({
+title: "Error",
+description: "Leaderboard content not found",
+});
+return;
+}
+
+const ws = XLSX.utils.table_to_sheet(table);
+const wb = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb, ws, "Leaderboard");
+
+const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
+
+saveAs(data, "leaderboard.xlsx");
+
+toast({
+title: "Export Success",
+description: "Leaderboard has been exported as an Excel file",
+});
+};
+
+Make sure your leaderboard table has an id="leaderboard", then call these functions on a button click:
+
+<button onClick={handleExportPDF}>Export to PDF</button>
+<button onClick={handleExportExcel}>Export to Excel</button>
+
+"How can I add a full-screen button to make my Current Rankings table go full screen in a React TypeScript (.tsx) file?"
+Add a Fullscreen Button in React (.tsx)
+Modify your code to include a button that triggers fullscreen mode:
+import { useRef } from "react";
+
+const Leaderboard = () => {
+const tableRef = useRef<HTMLDivElement>(null);
+
+const handleFullScreen = () => {
+if (tableRef.current) {
+if (document.fullscreenElement) {
+document.exitFullscreen();
+} else {
+tableRef.current.requestFullscreen();
+}
+}
+};
+
+return (
+<div>
+<button onClick={handleFullScreen}>Toggle Fullscreen</button>
+<div id="leaderboard" ref={tableRef} style={{ border: "1px solid #ccc", padding: "10px" }}>
+{/* Your Rankings Table Here */}
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Name</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>John Doe</td>
+<td>98</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Jane Smith</td>
+<td>95</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+);
+};
+
+export default Leaderboard;
+2. How It Works
+Clicking "Toggle Fullscreen" makes the Current Rankings table full screen.
+If already in full screen, clicking again exits full screen.
+The useRef hook ensures the table element is referenced correctly.
+
+"How can I make my Current Rankings table update live in React TypeScript (.tsx) and animate when participants change ranks? If someone gets a higher score, they should smoothly move to the top with an animation."
+
+How It Works
+Uses setInterval() to simulate live score updates.
+Updates the rankings every 3 seconds.
+Uses Framer Motion's layout animation for smooth rank transitions when scores update.
+If a participant's score increases, they smoothly move up.

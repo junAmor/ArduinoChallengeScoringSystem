@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --teal-green: #01726F;
+  --dark-cyan: #025959;
+  --sea-green: #03A688;
+  --mint-green: #9ADABC;
+  --ivory-white: #F2F2F2;
+  --charcoal-gray: #2E2E2E;
+  /* --efb311: #efb311;
+  --61b5bf: #61b5bf;
+  --f57b12: #f57b12;
+  --189491: #189491; */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  /* .color-189491 {
+    color: var(--189491);
+  } */
+  
+  .text-teal-green {
+    color: var(--teal-green);
+  }
+  
+  .text-dark-cyan {
+    color: var(--dark-cyan);
+  }
+  
+  .text-sea-green {
+    color: var(--sea-green);
+  }
+  
+  .text-mint-green {
+    color: var(--mint-green);
+  }
+  
+  .text-ivory-white {
+    color: var(--ivory-white);
+  }
+  
+  .text-charcoal-gray {
+    color: var(--charcoal-gray);
+  }
+  
+  .bg-teal-green {
+    background-color: var(--teal-green);
+  }
+  
+  .bg-dark-cyan {
+    background-color: var(--dark-cyan);
+  }
+  
+  .bg-sea-green {
+    background-color: var(--sea-green);
+  }
+  
+  .bg-mint-green {
+    background-color: var(--mint-green);
+  }
+  
+  .bg-ivory-white {
+    background-color: var(--ivory-white);
+  }
+  
+  .bg-charcoal-gray {
+    background-color: var(--charcoal-gray);
+  }
+  
+  .border-teal-green {
+    border-color: var(--teal-green);
+  }
+  
+  .border-dark-cyan {
+    border-color: var(--dark-cyan);
+  }
+  
+  .border-sea-green {
+    border-color: var(--sea-green);
+  }
+  
+  .border-mint-green {
+    border-color: var(--mint-green);
+  }
+}
