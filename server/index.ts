@@ -1,7 +1,9 @@
-import { Pool } from 'pg';
+import pkg from "pg";
+const { Pool } = pkg;
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+
 
 
 const pool = new Pool({
@@ -11,7 +13,6 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT), // Ensure port is a number
 });
-
 
 
 const app = express();
