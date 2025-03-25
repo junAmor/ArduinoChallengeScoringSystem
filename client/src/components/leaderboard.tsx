@@ -103,7 +103,7 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
 
     // Add centered bold text
     doc.text(text, x, 10);
-    const header = ["Rank", "Participant", "Project Title", "Project Design", "Functionality", "Presentation", "Web Design", "Impact", "Total Score"];
+    const header = ["RANK", "TEAM NAME", "PROJECT TITLE", "PD", "FN", "PR", "WD", "IM", "SCORE"];
     doc.setFontSize(12);
     autoTable(doc, {
       head: [header],
@@ -282,18 +282,19 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
 
       <div ref={tableRef} className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
         <div id="leaderboard-table" className="overflow-x-auto">
+          <H3>LEGEND: PROJECT DESIGN 25% (PD) | FUNCTIONALITY 30% (FN) | PRESENTATION 15% (PR) | WEB DESIGN 10% (WD) | IMPACT TO THE COMMUNITY 20%(IC)</H3>
           <table className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Rank</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Participant</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Project Title</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Project Design</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Functionality</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Presentation</th>
-                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Web Design</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Impact of the Project</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Total Score</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">RANK</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">TEAM NAME</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PROJECT TITLE</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PD</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">FN</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PR</th>
+                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">WD</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">IM</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">TOTAL SCORE</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-slate-200">

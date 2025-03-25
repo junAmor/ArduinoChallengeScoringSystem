@@ -20,7 +20,7 @@ export const exportLeaderboardPDF = (leaderboard: LeaderboardEntry[]) => {
 
   // Table Headers and Data
   const headers = [
-    ["Rank", "Team Name", "Project Title", "Design", "Function", "Present.", "Web", "Impact", "Total"]
+    ["RANK", "TEAM NAME", "PROJECT TITLE", "PD", "FN", "PR.", "WD", "IM", "SCORE"]
   ];
 
   const rows = leaderboard.map(entry => [
