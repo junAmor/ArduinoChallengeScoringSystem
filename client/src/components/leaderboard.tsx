@@ -310,12 +310,13 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
           <table className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50">
               <tr>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">ranking</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Participant</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Project Title</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PD</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">FN</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PR</th>
-                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">WD</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">WD</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">IC</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">TOTAL SCORE</th>
               </tr>
@@ -334,11 +335,11 @@ export function Leaderboard({ onExport }: LeaderboardProps) {
                     className="hover:bg-slate-50 cursor-pointer"
                     onClick={() => handleRowClick(entry)}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap">
+{/*                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className={`flex items-center justify-center w-8 h-8 rounded-full text-white font-semibold ${getRankBadgeColor(entry.rank)}`}>
                         {entry.rank}
                       </div>
-                    </td>
+                    </td> */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
