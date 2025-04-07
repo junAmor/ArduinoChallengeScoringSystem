@@ -138,3 +138,7 @@ export class PersistentStorage implements IStorage {
     return { participants, evaluations, criteria: criteriaList, settings: settingsData };
   }
 }
+
+
+// Export an instance of PersistentStorage
+export const storage = new PersistentStorage();
