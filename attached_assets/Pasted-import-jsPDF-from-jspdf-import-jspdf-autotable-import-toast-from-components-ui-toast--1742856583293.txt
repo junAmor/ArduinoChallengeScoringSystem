@@ -1,0 +1,71 @@
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { toast } from "@/components/ui/toast";
+
+const handleExportPDF = () => {
+  const doc = new jsPDF("landscape", "mm", "a4"); // Landscape for better table fit
+  const table = document.getElementById("leaderboard-table");
+
+  if (!table) {
+    toast({
+      title: "Error",
+      description: "Leaderboard content not found",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  // Add Title
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text("Arduino Challenge Leaderboard", 148, 20, { align: "center" });
+
+  // Add event details
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+  doc.text("Event: University Arduino Innovation Challenge", 148, 30, { align: "center" });
+  doc.text(`Date: ${new Date().toLocaleDateString()}`, 148, 38, { align: "center" });
+
+  // Extract table data
+  const headers = [["Team Name", "Project Title", "Total Score", "Judge Comments"]];
+  const rows = [];
+
+  document.querySelectorAll("#leaderboard-table tbody tr").forEach((row) => {
+    const cols = row.querySelectorAll("td");
+    const rowData = [
+      cols[0]?.innerText || "", // Team Name
+      cols[1]?.innerText || "", // Project Title
+      cols[2]?.innerText || "", // Total Score
+      cols[3]?.innerText || "", // Judge Comments
+    ];
+    rows.push(rowData);
+  });
+
+  // Add table with auto-layout
+  doc.autoTable({
+    head: headers,
+    body: rows,
+    startY: 45, // Position below title
+    styles: {
+      font: "helvetica",
+      fontSize: 10,
+      cellPadding: 3,
+      overflow: "linebreak",
+    },
+    headStyles: { fillColor: [52, 73, 94], textColor: 255, fontSize: 12 },
+    columnStyles: {
+      0: { cellWidth: 50 }, // Team Name
+      1: { cellWidth: 70 }, // Project Title
+      2: { cellWidth: 30, halign: "center" }, // Total Score
+      3: { cellWidth: 90 }, // Judge Comments (Allow multiline)
+    },
+  });
+
+  // Save the PDF
+  doc.save("arduino-challenge-leaderboard.pdf");
+
+  toast({
+    title: "Export Success",
+    description: "Leaderboard has been exported as a PDF file",
+  });
+};
