@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { db } from "./db"; // Adjust the path to your database instance
+import { db } from "../shared/db"; // Adjust the path to your database instance
 import { users } from "../shared/schema"; // Adjust the path to your schema
 
 export async function checkAdminExists() {

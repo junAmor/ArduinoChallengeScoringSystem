@@ -1,27 +1,24 @@
-import pkg from "pg"; // Import the entire package
+import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
-import * as schema from "./schema"; // Adjust the path to your schema file
+// import * as schema from "./schema"; // Adjust the path to your schema file
 
-const { Pool } = pkg; // Destructure the Pool class from the imported package
+dotenv.config(); // Load environment variables from .env file
+import dotenv from "dotenv";
 
 // Create a PostgreSQL connection pool
 const pool = new Pool({
-  host: "dpg-cvfakthopnds73b8al50-a.oregon-postgres.render.com", // Replace with your database host
-  port: 5432, // Replace with your database port
-  user: "jerome", // Replace with your database user
-  password: "cceoN29xZchqU3TQVrrSFMoZo4LatpkV", // Replace with your database password
-  database: "arduichallengedb", // Replace with your database name
-  ssl: { rejectUnauthorized: false }, // Enable SSL for secure connections
-});
+    connectionString: process.env.DATABASE_URL, // Ensure this environment variable is set
+  });
+  
+  // Initialize the Drizzle ORM instance
+  export const db = drizzle(pool);
 
-// Initialize Drizzle with the schema
-export const db = drizzle(pool, { schema });
-// Automatically sync schema with the database (for development only)
+// Placeholder for database initialization or migration logic
 (async () => {
     try {
-        await db.sync(); // This will create tables based on your schema
-        console.log('Database schema synchronized successfully.');
+        console.log('Database connection initialized successfully.');
+        // Add migration or initialization logic here if needed
     } catch (err) {
-        console.error('Error synchronizing database schema:', err);
+        console.error('Error initializing database connection:', err);
     }
 })();
