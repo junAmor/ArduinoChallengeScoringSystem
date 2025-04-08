@@ -4,7 +4,31 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
+import bcrypt from "bcrypt";
+import { db } from "./db"; // Adjust the path to your database instance
+import { users } from "../shared/schema"; // Adjust the path to your schema
+import { eq } from "drizzle-orm";
 
+
+async function createDefaultAdmin() {
+  const adminExists = await db.select().from(users).where(eq(users.role, "admin")).limit(1);
+
+  if (!adminExists.length) {
+    const hashedPassword = await bcrypt.hash("admin-password", 10); // Replace with a secure password
+    await db.insert(users).values({
+      username: "admin",
+      password: hashedPassword,
+      name: "Administrator",
+      role: "admin",
+    });
+    console.log("Default admin user created.");
+  } else {
+    console.log("Admin user already exists.");
+  }
+}
+
+// Call this function during server startup
+await createDefaultAdmin();
 
 const pool = new Pool({
   user: process.env.jerome,
