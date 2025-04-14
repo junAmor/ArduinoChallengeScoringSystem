@@ -14,7 +14,7 @@ async function createDefaultAdmin() {
   const adminExists = await db.select().from(users).where(eq(users.role, "admin")).limit(1);
 
   if (!adminExists.length) {
-    const hashedPassword = await bcrypt.hash("admin-password", 10); // Replace with a secure password
+    const hashedPassword = await bcrypt.hash("adminpass", 10); // Replace with a secure password
     await db.insert(users).values({
       username: "admin",
       password: hashedPassword,
