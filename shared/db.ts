@@ -1,10 +1,11 @@
-import { Pool } from "pg";
+import pkg from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 // import * as schema from "./schema"; // Adjust the path to your schema file
 
-dotenv.config(); // Load environment variables from .env file
 import dotenv from "dotenv";
+dotenv.config(); // Load environment variables from .env file
 
+const { Pool } = pkg;
 // Create a PostgreSQL connection pool
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL, // Ensure this environment variable is set
