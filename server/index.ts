@@ -5,7 +5,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 import bcrypt from "bcrypt";
-import { db } from "./db"; // Adjust the path to your database instance
+import { db } from "../shared/db"; // Adjust the path to your database instance
 import { users } from "../shared/schema"; // Adjust the path to your schema
 import { eq } from "drizzle-orm";
 
